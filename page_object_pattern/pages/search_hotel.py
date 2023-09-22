@@ -1,6 +1,9 @@
+from allure_commons.types import AttachmentType
 from selenium.webdriver.common.by import By
 from page_object_pattern.lacators.locators import SearchHotelLocators
 import logging
+import allure
+
 
 class SearchHotelPage:
 
@@ -17,11 +20,13 @@ class SearchHotelPage:
         # self.child_input_id = SearchHotelLocators.child_input_id
         # self.search_button_xpath = SearchHotelLocators.search_button_xpath
 
+    @allure.step("Setting city name to '{1}'")
     def set_city(self, city):
         self.logger.info("Setting city {} ".format(city))
         self.driver.find_element(By.XPATH, SearchHotelLocators.search_hotel_span_xpath).click()
         self.driver.find_element(By.XPATH, SearchHotelLocators.search_hotel_input_xpath).send_keys(city)
         self.driver.find_element(By.XPATH, SearchHotelLocators.location_match_xpath).click()
+        allure.attach(self.driver.get_screenshot_as_png(), name="set_city", attachment_type=AttachmentType.PNG)
 
     def set_date_range(self, check_in, check_out):
         self.logger.info("Setting check in {checkin} and {checkout} dates ".format(checkin=check_in, checkout=check_out))
